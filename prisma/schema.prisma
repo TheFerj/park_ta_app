@@ -2,13 +2,12 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
-    previewFeatures = ["jsonProtocol"]
+  provider = "prisma-client-js"
 }
-
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Listing {
@@ -30,6 +29,7 @@ model Message{
     listingId String
     message String
     listing Listing @relation("userMessage", fields: [listingId], references: [id])
+    @@index([listingId])
 }
 
 model ParkingLocation{
@@ -44,5 +44,7 @@ model ParkingSpaces{
     status String
     parkingId Int
     parking ParkingLocation @relation("userParking", fields: [parkingId], references: [id])
+
+    @@index([parkingId])
 }
 
