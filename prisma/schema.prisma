@@ -11,8 +11,38 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
+model Listing {
     id        String   @id @default(cuid())
+    userId String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    name String
+    description String
+    price Float
+    message Message[]@relation("userMessage")
+
 }
+
+model Message{
+    id String @id @default(cuid())
+    fromUser String
+    fromUserName String
+    listingId String
+    message String
+    listing Listing @relation("userMessage", fields: [listingId], references: [id])
+}
+
+model ParkingLocation{
+    id Int @id @default(autoincrement())
+    name String
+    location String
+    parkingSpace ParkingSpaces[]@relation("userParking")
+}
+model ParkingSpaces{
+    id Int @id @default(autoincrement())
+    parkingNumber String
+    status String
+    parkingId Int
+    parking ParkingLocation @relation("userParking", fields: [parkingId], references: [id])
+}
+
